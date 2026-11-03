@@ -1,12 +1,20 @@
 
-from langchain_openai import ChatOpenAI
+import os
+
+from dotenv import load_dotenv
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from langchain_core.prompts import ChatPromptTemplate
+
+load_dotenv()
 
 
 def create_rag_chain(vector_store):
 
-    llm = ChatOpenAI(
-        model="gpt-4.1-mini",
+    llm = ChatNVIDIA(
+        model=os.getenv(
+            "NVIDIA_CHAT_MODEL",
+            "nvidia/nemotron-3-super-120b-a12b"
+        ),
         temperature=0
     )
 
@@ -27,7 +35,7 @@ def create_rag_chain(vector_store):
             - Do not invent code or functionality.
             - Explain the implementation clearly.
             - Mention relevant file paths.
-            - If the context is insufficient,
+            - If context is insufficient,
               explicitly say so.
             - Identify dependencies between files
               when supported by the context.

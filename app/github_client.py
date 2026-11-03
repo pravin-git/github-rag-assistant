@@ -1,7 +1,9 @@
 
 import os
 
+from contextlib import asynccontextmanager
 from dotenv import load_dotenv
+
 from fastmcp import Client
 from langchain.mcp import MCPAdapter
 
@@ -10,7 +12,9 @@ load_dotenv()
 GITHUB_MCP_URL = "https://api.githubcopilot.com/mcp/"
 
 
+@asynccontextmanager
 async def connect_github():
+
     token = os.getenv("GITHUB_TOKEN")
 
     if not token:
@@ -21,15 +25,13 @@ async def connect_github():
         auth=token
     )
 
-    adapter = MCPAdapter(client)
+    async with MCPAdapter(client) as adapter:
 
-    await adapter.__aenter__()
+        tools = await adapter.list_tools()
 
-    tools = await adapter.list_tools()
+        print("\nAvailable GitHub MCP tools:")
 
-    print("\nAvailable GitHub MCP tools:")
+        for tool in tools:
+            print(f"- {tool.name}")
 
-    for tool in tools:
-        print(f"- {tool.name}: {tool.description}")
-
-    return adapter, tools
+        yield adapter, tools

@@ -1,5 +1,6 @@
+
 langchain[mcp]>=1.4.0
-langchain-openai
+langchain-nvidia-ai-endpoints
 langchain-chroma
 langchain-text-splitters
 chromadb
