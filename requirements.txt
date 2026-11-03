@@ -1,0 +1,6 @@
+langchain[mcp]>=1.4.0
+langchain-openai
+langchain-chroma
+langchain-text-splitters
+chromadb
+python-dotenv
